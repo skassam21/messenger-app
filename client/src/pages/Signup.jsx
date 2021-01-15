@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Hidden from '@material-ui/core/Hidden';
 import Snackbar from '@material-ui/core/Snackbar';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -116,9 +116,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function useRegister() {
+	const history = useHistory();
+
 	const login = (email, password) => {
 		// console.log(email, password);
-		// fetch('api/login').then((res) => res.json);
+		// TODO make API call
+		// for now assume API returns user
+		const user = { email };
+		localStorage.setItem('user', user);
+		history.push('/dashboard');
 	};
 	return login;
 }
@@ -133,6 +139,14 @@ export default function Register() {
 		if (reason === 'clickaway') return;
 		setOpen(false);
 	};
+
+	const history = useHistory();
+
+	React.useEffect(() => {
+		const user = localStorage.getItem('user');
+		if (user) history.push('/dashboard');
+	}, []);
+
 
 	return (
 		<Grid container component="main" className={classes.root}>

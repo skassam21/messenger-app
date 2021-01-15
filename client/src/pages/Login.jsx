@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Hidden from '@material-ui/core/Hidden';
 import Snackbar from '@material-ui/core/Snackbar';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -119,8 +119,15 @@ const useStyles = makeStyles((theme) => ({
 
 // Login middleware placeholder
 function useLogin() {
+	const history = useHistory();
+
 	const login = (email, password) => {
 		console.log(email, password);
+		// TODO make API call
+		// for now assume API returns user
+		const user = { email };
+		localStorage.setItem('user', user);
+		history.push('/dashboard');
 	};
 	return login;
 }
@@ -128,6 +135,14 @@ function useLogin() {
 export default function Login() {
 	const classes = useStyles();
 	const [ open, setOpen ] = React.useState(true);
+
+	const history = useHistory();
+
+	React.useEffect(() => {
+		const user = localStorage.getItem('user');
+		if (user) history.push('/dashboard');
+	}, []);
+
 
 	const login = useLogin();
 
@@ -144,7 +159,7 @@ export default function Login() {
 					<Hidden xsDown>
 						<img width={67} src="/images/chatBubble.png" />
 						<Hidden smDown>
-							<Typography className={classes.heroText}>Converse with anyone with any language</Typography>
+							<p className={classes.heroText}>Converse with anyone with any language</p>
 						</Hidden>
 					</Hidden>
 				</Box>
@@ -163,9 +178,9 @@ export default function Login() {
 					<Box width="100%" maxWidth={450} p={3} alignSelf="center">
 						<Grid container>
 							<Grid item xs>
-								<Typography className={classes.welcome} component="h1" variant="h5">
+								<p className={classes.welcome} component="h1" variant="h5">
 									Welcome back!
-								</Typography>
+								</p>
 							</Grid>
 						</Grid>
 						<Formik
@@ -199,7 +214,7 @@ export default function Login() {
 								<form onSubmit={handleSubmit} className={classes.form} noValidate>
 									<TextField
 										id="email"
-										label={<Typography className={classes.label}>E-mail address</Typography>}
+										label={<p className={classes.label}>E-mail address</p>}
 										fullWidth
 										margin="normal"
 										InputLabelProps={{
