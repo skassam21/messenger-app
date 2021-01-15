@@ -123,7 +123,9 @@ function useRegister() {
 		// TODO make API call
 		// for now assume API returns user
 		const user = { email };
+		const token = "test";
 		localStorage.setItem('user', user);
+		localStorage.setItem('token', token);
 		history.push('/dashboard');
 	};
 	return login;
