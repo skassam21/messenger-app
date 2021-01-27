@@ -121,17 +121,13 @@ function useRegister() {
 
   const login = async (username, email, password) => {
     console.log(email, password);
-    try {
-      const res = await fetch(
-        `/auth/signup?username=${username}&email=${email}&password=${password}`
-      ).then(res => res.json());
-      console.log(res);
-      localStorage.setItem("user", res.user);
-      localStorage.setItem("token", res.token);
-      history.push("/dashboard");
-    } catch (e) {
-      console.log(e);
-    }
+    const res = await fetch(
+      `/auth/signup?username=${username}&email=${email}&password=${password}`
+    ).then(res => res.json());
+    console.log(res);
+    localStorage.setItem("user", res.user);
+    localStorage.setItem("token", res.token);
+    history.push("/dashboard");
   };
   return login;
 }
