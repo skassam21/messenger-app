@@ -4,4 +4,8 @@ This starter repo will be used for building applications using React, Material-U
 
 ## Getting started
 
-The project is broken down into a client and server folder.
+Run the server (see Readme in that folder).
+
+Run the client (see Readme in that folder).
+
+Access the client and it will talk to the server.
