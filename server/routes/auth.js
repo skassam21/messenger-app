@@ -1,6 +1,7 @@
 const User = require("../models/User")
 const express = require("express");
 const router = express.Router();
+const jwt = require('jsonwebtoken')
 
 // @desc Auth user & get token
 // @route POST /api/users/login
@@ -13,9 +14,7 @@ router.get("/login", async (req, res) => {
     if (user && (await user.matchPassword(password))) {
         res.json({
             token: "Bearer " + generateToken(user._id),
-            name: user.name,
-            username: user.username,
-            userId: user._id,
+            user
         })
     } else {
         res.status(401).json({error: "Invalid email or password"})
@@ -26,7 +25,7 @@ router.get("/login", async (req, res) => {
 // @route   POST /api/users/register
 // @access   Public
 router.get("/signup", async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password } = req.query;
 
     const userNameExists = await User.findOne({ username });
     const userEmailExists = await User.findOne({ email });
@@ -48,13 +47,17 @@ router.get("/signup", async (req, res) => {
     if (user) {
         res.status(201).json({
             token: "Bearer " + generateToken(user._id),
-            name: user.name,
-            username: user.username,
-            userId: user._id,
+            user
         });
     } else {
         res.status(400).json({error: "Invalid user data"})
     }
 });
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, "secretOrPrivateKey", {
+        expiresIn: '30d'
+    })
+}
 
 module.exports = router;
